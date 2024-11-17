@@ -3,11 +3,13 @@ from tkinter import ttk
 import tkinter.font
 
 def on_button(sign):
-    global text
-    zero_label.pack_forget()
-    window_frame.pack_forget()
-    label.pack()
-    window_frame.pack()
+    global text, button_clicked
+    if not button_clicked:
+        zero_label.pack_forget()
+        window_frame.pack_forget()
+        label.pack()
+        window_frame.pack()
+        button_clicked = True
     text += str(sign)
     label.configure(text=text)
 
@@ -42,13 +44,15 @@ def on_negate():
         pass
 
 def on_clear_button():
-    global text
+    global text, button_clicked
     text = ""
     label.configure(text="")
-    label.pack_forget()
-    window_frame.pack_forget()
-    zero_label.pack()
-    window_frame.pack()
+    if button_clicked:
+        label.pack_forget()
+        window_frame.pack_forget()
+        zero_label.pack()
+        window_frame.pack()
+        button_clicked = False
 
 def create_buttons():
     buttons = {"mod":ttk.Button(window_frame,text="%",command=lambda: on_button("%")),"CE":ttk.Button(window_frame,text="CE",command=on_clear_button),
@@ -106,6 +110,7 @@ def create_labels():
 
 if __name__ == "__main__":
     window = Tk()
+    button_clicked = False
     text = ""
     zero_label, label = create_labels()
     window_frame = setup_window()
