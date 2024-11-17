@@ -4,8 +4,10 @@ import tkinter.font
 
 def on_button(sign):
     global text
-    zero_label.grid_forget()
-    label.grid(row=0,column=2)
+    zero_label.pack_forget()
+    window_frame.pack_forget()
+    label.pack()
+    window_frame.pack()
     text += str(sign)
     label.configure(text=text)
 
@@ -43,8 +45,10 @@ def on_clear_button():
     global text
     text = ""
     label.configure(text="")
-    label.grid_forget()
-    zero_label.grid(row=0,column=2)
+    label.pack_forget()
+    window_frame.pack_forget()
+    zero_label.pack()
+    window_frame.pack()
 
 def create_buttons():
     buttons = {"mod":ttk.Button(window_frame,text="%",command=lambda: on_button("%")),"CE":ttk.Button(window_frame,text="CE",command=on_clear_button),
@@ -91,20 +95,20 @@ def setup_buttons():
     buttons["equals"].grid(row=7,column=1)
 
 def create_labels():
-    label = ttk.Label(window_frame,text=text)
+    label = ttk.Label(window,text=text)
     label_font = tkinter.font.Font(font=tkinter.font.nametofont("TkDefaultFont"))
     label_font.configure(size=19)
     label["font"] = label_font
-    zero_label = ttk.Label(window_frame,text="0")
+    zero_label = ttk.Label(window,text="0")
     zero_label["font"] = label_font
-    zero_label.grid(row=0,column=2)
+    zero_label.pack()
     return (zero_label,label)
 
 if __name__ == "__main__":
     window = Tk()
-    window_frame = setup_window()
     text = ""
     zero_label, label = create_labels()
+    window_frame = setup_window()
     buttons = create_buttons()
     setup_buttons()
     window.mainloop()
