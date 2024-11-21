@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from ttkthemes import ThemedTk
 import tkinter.font
 
 def on_button(sign):
