@@ -110,4 +110,5 @@ if __name__ == "__main__":
     setup_buttons()
     style = ttk.Style()
     style.theme_use("radiance")
+    style.configure("TFrame",background=window.cget("bg"))
     window.mainloop()
