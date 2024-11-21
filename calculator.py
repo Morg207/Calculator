@@ -4,13 +4,12 @@ import tkinter.font
 
 def on_button(sign):
     global text, button_clicked
-    if not button_clicked:
-        zero_label.pack_forget()
-        window_frame.pack_forget()
-        label.pack()
-        window_frame.pack()
-        button_clicked = True
     text += str(sign)
+    if not button_clicked and sign != 0:
+        result_text_l = list(text)
+        result_text_l = result_text_l[1:]
+        text = "".join(result_text_l)
+    button_clicked = True
     label.configure(text=text)
 
 def on_equals_button():
@@ -45,34 +44,28 @@ def on_negate():
 
 def on_clear_button():
     global text, button_clicked
-    text = ""
-    label.configure(text="")
-    if button_clicked:
-        label.pack_forget()
-        window_frame.pack_forget()
-        zero_label.pack()
-        window_frame.pack()
-        button_clicked = False
-
+    text = "0"
+    label.configure(text=text)
+    button_clicked = False
+    
 def create_buttons():
-    buttons = {"mod":ttk.Button(window_frame,text="%",command=lambda: on_button("%")),"CE":ttk.Button(window_frame,text="CE",command=on_clear_button),
-           "C":ttk.Button(window_frame,text="C",command=on_clear_button),"divide":ttk.Button(window_frame,text="÷",command=lambda: on_button("/")),
-           "7":ttk.Button(window_frame,text="7",command=lambda: on_button(7)),"8":ttk.Button(window_frame,text="8",command=lambda: on_button(8)),
-           "9":ttk.Button(window_frame,text="9",command=lambda: on_button(9)),"multiply":ttk.Button(window_frame,text="x",command=lambda: on_button("*")),
-           "4":ttk.Button(window_frame,text="4",command=lambda: on_button(4)),"5":ttk.Button(window_frame,text="5",command=lambda: on_button(5)),
-           "6":ttk.Button(window_frame,text="6",command=lambda: on_button(6)),"subtract":ttk.Button(window_frame,text="-",command=lambda: on_button("-")),
-           "1":ttk.Button(window_frame,text="1",command=lambda: on_button(1)),"2":ttk.Button(window_frame,text="2",command=lambda: on_button(2)),
-           "3":ttk.Button(window_frame,text="3",command=lambda: on_button(3)),"plus":ttk.Button(window_frame,text="+",command=lambda: on_button("+")),
-           "+/-":ttk.Button(window_frame,text="+/-",command=on_negate),"0":ttk.Button(window_frame,text="0",command=lambda: on_button(0)),
-           ".":ttk.Button(window_frame,text=".",command=lambda: on_button(".")),"equals":ttk.Button(window_frame,text="=",command=on_equals_button)}
+    buttons = {"mod":ttk.Button(window_frame,width=5,text="%",command=lambda: on_button("%")),"CE":ttk.Button(window_frame,width=5,text="CE",command=on_clear_button),
+           "C":ttk.Button(window_frame,width=5,text="C",command=on_clear_button),"divide":ttk.Button(window_frame,width=5,text="÷",command=lambda: on_button("/")),
+           "7":ttk.Button(window_frame,width=5,text="7",command=lambda: on_button(7)),"8":ttk.Button(window_frame,width=5,text="8",command=lambda: on_button(8)),
+           "9":ttk.Button(window_frame,width=5,text="9",command=lambda: on_button(9)),"multiply":ttk.Button(window_frame,width=5,text="x",command=lambda: on_button("*")),
+           "4":ttk.Button(window_frame,width=5,text="4",command=lambda: on_button(4)),"5":ttk.Button(window_frame,text="5",width=5,command=lambda: on_button(5)),
+           "6":ttk.Button(window_frame,width=5,text="6",command=lambda: on_button(6)),"subtract":ttk.Button(window_frame,width=5,text="-",command=lambda: on_button("-")),
+           "1":ttk.Button(window_frame,width=5,text="1",command=lambda: on_button(1)),"2":ttk.Button(window_frame,text="2",width=5,command=lambda: on_button(2)),
+           "3":ttk.Button(window_frame,width=5,text="3",command=lambda: on_button(3)),"plus":ttk.Button(window_frame,width=5,text="+",command=lambda: on_button("+")),
+           "+/-":ttk.Button(window_frame,width=5,text="+/-",command=on_negate),"0":ttk.Button(window_frame,width=5,text="0",command=lambda: on_button(0)),
+           ".":ttk.Button(window_frame,width=5,text=".",command=lambda: on_button(".")),"equals":ttk.Button(window_frame,width=5,text="=",command=on_equals_button)}
     return buttons
 
 def setup_window():
     window.title("Calculator")
     icon_image = PhotoImage(file="icon.png")
     window.iconphoto(False,icon_image)
-    window.geometry("250x265")
-    window_frame = ttk.Frame(window,padding="12 0 12 12")
+    window_frame = ttk.Frame(window,padding="12 0 12 20")
     window_frame.pack()
     return window_frame
 
@@ -99,21 +92,22 @@ def setup_buttons():
     buttons["equals"].grid(row=7,column=1)
 
 def create_labels():
-    label = ttk.Label(window,text=text)
+    label = ttk.Label(window,text=text,width=20)
     label_font = tkinter.font.Font(font=tkinter.font.nametofont("TkDefaultFont"))
     label_font.configure(size=19)
     label["font"] = label_font
-    zero_label = ttk.Label(window,text="0")
-    zero_label["font"] = label_font
-    zero_label.pack()
-    return (zero_label,label)
+    label.configure(anchor="e",background=window.cget("bg"))
+    label.pack(padx=(0,40))
+    return label
 
 if __name__ == "__main__":
-    window = Tk()
+    window = ThemedTk()
     button_clicked = False
-    text = ""
-    zero_label, label = create_labels()
+    text = "0"
+    label = create_labels()
     window_frame = setup_window()
     buttons = create_buttons()
     setup_buttons()
+    style = ttk.Style()
+    style.theme_use("radiance")
     window.mainloop()
